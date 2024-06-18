@@ -2,8 +2,7 @@ const express = require('express')
 const app = express();
 const db =require('./db');
 require('dotenv').config();
-const passport = require('passport');
-const Localstrategy = require('passport-local').Strategy;
+const passport = require('./auth');
 
 
 const bodyParser =require('body-parser');
@@ -17,8 +16,12 @@ const logRequest=(req,res,next)=>{
         next();
 }
 app.use(logRequest);
+
+app.use(passport.initialize());
+
+const localAuthMiddleware = passport.authenticate('local',{session: false})
 app.get('/',function(req,res){
-        res.send('Welcome to my hotel')
+        res.send('Welcome to my hotel');
 })
 
 //Import the router files.......
